@@ -104,19 +104,23 @@ export default function App() {
     []
   );
 
+  
   const isSignedIn = !!state.userToken
+  console.log('hi 1', isSignedIn)
 
   return (
     <NativeBaseProvider>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
-          {
-            isSignedIn ? (
-              <Stack.Screen name="Home" component={Home}/>
-            ) : (
-              <Stack.Screen name="Auth" component={Auth}/>
-            )
-          }
+          <Stack.Navigator>
+            {
+              isSignedIn ? (
+                <Stack.Screen name="Home" component={Home}/>
+              ) : (
+                <Stack.Screen name="Auth" component={Auth}/>
+              )
+            }
+          </Stack.Navigator>
         </NavigationContainer>
       </AuthContext.Provider>
     </NativeBaseProvider>
