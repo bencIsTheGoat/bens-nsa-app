@@ -3,14 +3,12 @@ import * as SecureStore from 'expo-secure-store';
 import { Alert, Box, Button, Center, Modal, Text } from 'native-base';
 import { useState } from 'react';
 import { useContext } from 'react';
-import AuthContext from '../context/AuthContext';
+import AuthContext from '../../context/AuthContext';
 
 export default () => {
 
   const { signIn } = useContext(AuthContext)
-  const [showModal, setShowModal] = useState(true)
-
-  console.log('hi 2')
+  const [showModal, setShowModal] = useState(false)
 
   return (
     <Center flex='1'>
@@ -27,22 +25,19 @@ export default () => {
                 AppleAuthentication.AppleAuthenticationScope.EMAIL,
               ],
             });
+            console.warn('got credentials', credential)
+            return await signIn(JSON.stringify(credential))
             switch (credential.realUserStatus) {
-              case 2: {
-                return signIn(JSON.stringify(credential))
-              }
               case 0:
               case 1:
+              case 2: {
+              }
               default: {
-
+                throw new Error('Unverified')
               }
             }
           } catch (e) {
-            if (e.code === 'ERR_CANCELED') {
-              // handle that the user canceled the sign-in flow
-            } else {
-              // handle other errors
-            }
+            setShowModal(true)
           }
         }}
       />
@@ -50,7 +45,7 @@ export default () => {
         showModal && (
           <Modal isOpen={showModal} size='md'>
             <Modal.Content>
-              <Modal.CloseButton />
+              <Modal.CloseButton onPress={() => setShowModal(false)}/>
               <Modal.Header>Account Verification Error</Modal.Header>
               <Modal.Body>
                 <Text>

@@ -10,8 +10,10 @@ import * as SecureStore from 'expo-secure-store';
 import { ScreenStack } from "react-native-screens";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from "./screens/Home";
-import Auth from "./screens/Auth";
+import Auth from "./screens/Onboarding/Auth";
 import AuthContext from "./context/AuthContext";
+import { Reducer } from "react";
+import Onboarding from "./screens/Onboarding/Onboarding";
 
 // Define the config
 const config = {
@@ -28,34 +30,30 @@ declare module "native-base" {
 
 const Stack = createNativeStackNavigator();
 
+interface PrevState {
+  userToken: string | null
+}
+
+interface Action {
+  type: 'SIGN_IN'
+  token: string
+}
+
+
 export default function App() {
 
-  const [state, dispatch] = React.useReducer(
+  const [state, dispatch] = React.useReducer<Reducer<PrevState, Action>>(
     (prevState, action) => {
       switch (action.type) {
-        case 'RESTORE_TOKEN':
-          return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-          };
         case 'SIGN_IN':
           return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
           };
-        case 'SIGN_OUT':
-          return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-          };
       }
     },
     {
-      isLoading: true,
-      isSignout: false,
       userToken: null,
     }
   );
@@ -75,7 +73,7 @@ export default function App() {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      userToken && dispatch({ type: 'SIGN_IN', token: userToken });
     };
 
     bootstrapAsync();
@@ -89,33 +87,38 @@ export default function App() {
         // After getting token, we need to persist the token using `SecureStore`
         // In the example, we'll use a dummy token
 
-        dispatch({ type: 'SIGN_IN', token });
-      },
-      signOut: () => dispatch({ type: 'SIGN_OUT' }),
-      signUp: async (token: string) => {
-        // In a production app, we need to send user data to server and get a token
-        // We will also need to handle errors if sign up failed
-        // After getting token, we need to persist the token using `SecureStore`
-        // In the example, we'll use a dummy token
+        await SecureStore.setItemAsync('userToken', token);
 
         dispatch({ type: 'SIGN_IN', token });
       },
+      // signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      // signUp: async (token: string) => {
+      //   // In a production app, we need to send user data to server and get a token
+      //   // We will also need to handle errors if sign up failed
+      //   // After getting token, we need to persist the token using `SecureStore`
+      //   // In the example, we'll use a dummy token
+
+      //   dispatch({ type: 'SIGN_IN', token });
+      // },
     }),
     []
   );
 
   
-  const isSignedIn = !!state.userToken
-  console.log('hi 1', isSignedIn)
+  const isSignedIn = true || !!state.userToken
+  const doesUserHaveProfile = false;
 
   return (
     <NativeBaseProvider>
       <AuthContext.Provider value={authContext}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName={doesUserHaveProfile ? 'Home' : 'Onboarding'}>
             {
               isSignedIn ? (
-                <Stack.Screen name="Home" component={Home}/>
+                <>
+                  <Stack.Screen name="Home" component={Home} />
+                  <Stack.Screen name="Onboarding" component={Onboarding}/>
+                </>
               ) : (
                 <Stack.Screen name="Auth" component={Auth}/>
               )

@@ -2,7 +2,8 @@ import { Box, Text } from 'native-base';
 
 export default () => {
 
-  console.log('hi 3')
+  const doesUserExist = false;
+  
   return (
     <Box>
       <Text>
