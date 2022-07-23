@@ -6,13 +6,15 @@ import { CameraType, FaceDetectionResult } from 'expo-camera/build/Camera.types'
 import { Dimensions, Image } from 'react-native';
 import { useRef } from 'react';
 import { useState } from 'react';
+import { useSafeSWRConfig } from '../../utils/safeSWR';
 
 const { width } = Dimensions.get('screen');
 
 export default () => {
+  const { cache } = useSafeSWRConfig();
   return (
     <Box>
-      <Text>Good eve</Text>
+      <Text>{JSON.stringify(cache.get('appleCredentials'))}</Text>
     </Box>
   );
   // const cameraRef = useRef<Camera>();

@@ -11,6 +11,9 @@ export default ({ navigation }: ScreenProps<'SignIn'>) => {
 
   const handlePress = async () => {
     try {
+      const isAvailable = await AppleAuthentication.isAvailableAsync();
+      if (!isAvailable) throw new Error('Fucked');
+
       const credential = await AppleAuthentication.signInAsync({
         requestedScopes: [
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
@@ -19,7 +22,7 @@ export default ({ navigation }: ScreenProps<'SignIn'>) => {
       });
 
       cache.set('appleCredentials', credential);
-      navigation.replace('Onboarding', {});
+      navigation.push('Onboarding', {});
     } catch (e) {
       setShowModal(true);
     }

@@ -1,6 +1,6 @@
 import { AppleAuthenticationCredential } from 'expo-apple-authentication';
 import useSWR, { useSWRConfig } from 'swr';
-import { FullConfiguration } from 'swr/dist/types';
+import { BareFetcher, FullConfiguration, PublicConfiguration } from 'swr/dist/types';
 
 interface User {}
 
@@ -9,8 +9,11 @@ export interface SWRTypes {
   appleCredentials: AppleAuthenticationCredential;
 }
 
-export const useSafeSWR = <T extends keyof SWRTypes>(key: T) => {
-  return useSWR<SWRTypes[T]>(key);
+export const useSafeSWR = <T extends keyof SWRTypes>(
+  key: T,
+  options?: Partial<PublicConfiguration<SWRTypes[T], any, BareFetcher<SWRTypes[T]>>>
+) => {
+  return useSWR<SWRTypes[T]>(key, options);
 };
 
 interface Cache {

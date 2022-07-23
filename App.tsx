@@ -24,7 +24,6 @@ declare module 'native-base' {
 export default function App() {
   // SWR Configs
   const swrValue = {
-    refreshInterval: 3000,
     fetcher: (resource: string, init?: RequestInit) => fetch(resource, init).then((res) => res.json()),
     initFocus: (callback: Function) => {
       let appState = AppState.currentState;

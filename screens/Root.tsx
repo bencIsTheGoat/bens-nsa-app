@@ -23,11 +23,7 @@ declare module 'native-base' {
 const Stack = createNativeStackNavigator<StackParamList>();
 
 export default () => {
-  const { data: user, isValidating } = useSafeSWR('user');
-
-  if (isValidating) {
-    return <Spinner size="lg" />;
-  }
+  const { data: user } = useSafeSWR('user');
 
   return (
     <Stack.Navigator>
