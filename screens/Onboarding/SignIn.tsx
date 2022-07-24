@@ -21,8 +21,7 @@ export default ({ navigation }: ScreenProps<'SignIn'>) => {
         ],
       });
 
-      cache.set('appleCredentials', credential);
-      navigation.push('Onboarding', {});
+      navigation.replace('Onboarding', { credential });
     } catch (e) {
       setShowModal(true);
     }

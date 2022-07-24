@@ -6,7 +6,6 @@ interface User {}
 
 export interface SWRTypes {
   user: User;
-  appleCredentials: AppleAuthenticationCredential;
 }
 
 export const useSafeSWR = <T extends keyof SWRTypes>(

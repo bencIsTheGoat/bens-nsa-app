@@ -26,15 +26,15 @@ export default () => {
   const { data: user } = useSafeSWR('user');
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
         <>
           <Stack.Screen name="Home" component={Home} />
         </>
       ) : (
         <>
-          <Stack.Screen name="SignIn" component={SignIn} />
           <Stack.Screen name="Onboarding" component={Onboarding} />
+          <Stack.Screen name="SignIn" component={SignIn} />
         </>
       )}
     </Stack.Navigator>
