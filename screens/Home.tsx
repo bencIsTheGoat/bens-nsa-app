@@ -1,14 +1,11 @@
-import { Box, Text } from 'native-base';
+import { Button, Card, Layout, Modal, Text } from '@ui-kitten/components';
 
 export default () => {
-
   const doesUserExist = false;
-  
+
   return (
-    <Box>
-      <Text>
-        Hi
-      </Text>
-    </Box>
+    <Layout>
+      <Text>Hi</Text>
+    </Layout>
   );
-}
+};

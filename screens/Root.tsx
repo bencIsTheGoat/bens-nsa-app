@@ -1,5 +1,4 @@
 import React from 'react';
-import { extendTheme, Spinner } from 'native-base';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './Home';
 import SignIn from './Onboarding/SignIn';
@@ -14,11 +13,6 @@ const config = {
 };
 
 // extend the theme
-export const theme = extendTheme({ config });
-type MyThemeType = typeof theme;
-declare module 'native-base' {
-  interface ICustomTheme extends MyThemeType {}
-}
 
 const Stack = createNativeStackNavigator<StackParamList>();
 
@@ -33,8 +27,8 @@ export default () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Onboarding" component={Onboarding} />
           <Stack.Screen name="SignIn" component={SignIn} />
+          <Stack.Screen name="Onboarding" component={Onboarding} />
         </>
       )}
     </Stack.Navigator>

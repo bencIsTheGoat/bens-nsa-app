@@ -1,5 +1,4 @@
 import React from 'react';
-import { NativeBaseProvider, extendTheme } from 'native-base';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SWRConfig } from 'swr';
@@ -7,19 +6,8 @@ import { AppState, AppStateStatus } from 'react-native';
 import NetInfo, { NetInfoChangeHandler } from '@react-native-community/netinfo';
 import Root from './screens/Root';
 import { SafeMap } from './utils/safeSWR';
-
-// Define the config
-const config = {
-  useSystemColorMode: false,
-  initialColorMode: 'dark',
-};
-
-// extend the theme
-export const theme = extendTheme({ config });
-type MyThemeType = typeof theme;
-declare module 'native-base' {
-  interface ICustomTheme extends MyThemeType {}
-}
+import { ApplicationProvider } from '@ui-kitten/components';
+import * as eva from '@eva-design/eva';
 
 export default function App() {
   // SWR Configs
@@ -63,13 +51,13 @@ export default function App() {
   };
 
   return (
-    <NativeBaseProvider>
+    <ApplicationProvider {...eva} theme={eva.light}>
       {/* @ts-expect-error initReconnect async shit */}
       <SWRConfig value={swrValue}>
         <NavigationContainer>
           <Root />
         </NavigationContainer>
       </SWRConfig>
-    </NativeBaseProvider>
+    </ApplicationProvider>
   );
 }
